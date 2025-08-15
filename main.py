@@ -1,22 +1,30 @@
-
+import re
 import streamlit as st
 st.set_page_config(page_title="Hospital Management & Chatbot", layout="wide")
 import datetime
 
 # Mock database (in-memory)
 patients = []
-''''''# Chatbot logic (simple)
 def chatbot_response(user_input):
     user_input = user_input.lower()
-    if "appointment" in user_input:
+    # Appointment queries
+    if re.search(r"\b(appointment|book|schedule|register)\b", user_input):
         return "You can book an appointment under the 'Patient Registration' section."
-    elif "timing" in user_input:
+    # Hospital timings queries
+    elif re.search(r"\b(time|timing|hours|open|close|working)\b", user_input):
         return "Our hospital operates from 8 AM to 8 PM, Monday to Saturday."
-    elif "emergency" in user_input:
+    # Emergency queries
+    elif re.search(r"\b(emergency|urgent|help|accident|ambulance)\b", user_input):
         return "For emergencies, please call our 24/7 helpline: 1800-000-911."
+    # Patient info queries
+    elif re.search(r"\b(patient|registered|list|show)\b", user_input):
+        if patients:
+            return f"We currently have {len(patients)} registered patients."
+        else:
+            return "No patients are registered yet."
     else:
-        return "I'm sorry, I didn't understand that. You can ask about appointments, hospital hours, or emergency services."
-''''''
+        return "I'm sorry, I didn't understand that. You can ask about appointments, hospital hours, emergency services, or registered patients."
+
 # Streamlit App
 
 
